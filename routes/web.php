@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 // Route::get('/', [ 'as' => 'index', 'uses' => 'TradeController@index' ]);
 
 Route::get('/', function() {
-    return redirect()->routr('login');
+    return redirect()->route('login');
 });
 
 Route::group([ 'middleware' => 'auth' ], function() {
