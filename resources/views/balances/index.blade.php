@@ -14,7 +14,7 @@
             <div class="col">
                 <div class="card-deck">
                     @forelse ($balances as $balance)
-                        <div class="card text-white bg-{{ $balance->color }} mb-3" style="max-width: 20rem;">
+                        <div class="card text-white bg-{{ $balance->color }} mb-3">
                             <div class="card-header">
                                 {{ $balance->coin->symbol }}
                                 <span class="float-right">{{ $balance->market_price }}</span>

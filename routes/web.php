@@ -15,11 +15,14 @@ use Illuminate\Support\Facades\Auth;
 
 // Route::get('/', [ 'as' => 'index', 'uses' => 'TradeController@index' ]);
 
+Route::get('/', function() {
+    return redirect()->routr('login');
+});
 
-Route::group(['middleware' => 'auth'], function() {
-   // Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'TradeController@dashboard']);
-   // Route::match(['get', 'post'], 'begin', ['as' => 'begin', 'uses' => 'TradeController@begin']);
-   Route::resource('balances', 'BalanceController');
+Route::group([ 'middleware' => 'auth' ], function() {
+    Route::resource('balances', 'BalanceController');
+    // Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'TradeController@dashboard']);
+    // Route::match(['get', 'post'], 'begin', ['as' => 'begin', 'uses' => 'TradeController@begin']);
 });
 Auth::routes();
 

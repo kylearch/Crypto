@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\PriceHelper;
 use App\Models\Balance;
+use App\Models\Coin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,6 @@ class BalanceController extends Controller
      */
     public function index()
     {
-        // $balances = Auth::user()->balances()->select(['coin_id', 'price', DB::raw('SUM(`balance`) AS `balance`')])->groupBy('coin_id')->get()->keyBy('coin.symbol');
         $balances = Auth::user()->balances()->groupBy('coin_id')->selectRaw('coin_id, SUM(price) as price, SUM(balance) as balance')->get()->keyBy('coin.symbol');
 
         PriceHelper::getPrices($balances);
@@ -35,7 +35,9 @@ class BalanceController extends Controller
      */
     public function create()
     {
-        //
+        $coins = Coin::orderBy('name', 'asc')->get();
+
+        return view('balances.create', compact('coins'));
     }
 
     /**
@@ -47,7 +49,9 @@ class BalanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Auth::user()->balances()->create($request->only([ 'coin_id', 'balance', 'price' ]));
+
+        return redirect()->route('balances.index');
     }
 
     /**
