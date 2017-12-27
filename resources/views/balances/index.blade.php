@@ -12,7 +12,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <div class="card-deck">
+                <div class="card-columns">
                     @forelse ($balances as $balance)
                         <div class="card text-white bg-{{ $balance->color }} mb-3">
                             <div class="card-header">
@@ -34,12 +34,12 @@
                 </div>
             </div>
         </div>
-        @isset($last_fetch)
+        @isset ($last_fetch)
             <div class="row">
                 <div class="col">
                     <h6 class="float-right">Last Fetched: {{ $last_fetch->diffForHumans() }}</h6>
                 </div>
             </div>
-        @endif
+        @endisset
     </div>
 @endsection
