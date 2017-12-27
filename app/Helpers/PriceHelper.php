@@ -39,7 +39,7 @@ class PriceHelper
                 $data = collect(json_decode($response->getBody()->getContents()))->keyBy('symbol');
 
                 Cache::forever('last_fetch', Carbon::now());
-                Cache::forever('prices', $data);
+                Cache::put('prices', $data, 60);
 
                 return $data;
             }

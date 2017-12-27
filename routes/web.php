@@ -12,11 +12,17 @@
 */
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 // Route::get('/', [ 'as' => 'index', 'uses' => 'TradeController@index' ]);
 
 Route::get('/', function() {
     return redirect()->route('login');
+});
+
+Route::get('cache', function() {
+   Cache::put('test', time(), 1);
+   echo Cache::get('test', 'failed');
 });
 
 Route::group([ 'middleware' => 'auth' ], function() {
