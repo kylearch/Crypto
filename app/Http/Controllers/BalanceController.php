@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Helpers\PriceHelper;
 use App\Models\Balance;
 use App\Models\Coin;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class BalanceController extends Controller
@@ -21,6 +23,10 @@ class BalanceController extends Controller
         $balances = Auth::user()->balances()->groupBy('coin_id')->selectRaw('coin_id, SUM(price) as price, SUM(balance) as balance')->get()->keyBy('coin.symbol');
 
         PriceHelper::getPrices($balances);
+
+        if (Cache::has('last_fetch')) {
+            view()->share('last_fetch', Cache::get('last_fetch'));
+        }
 
         $value = $balances->sum('value');
         $gain  = $balances->sum('gain');

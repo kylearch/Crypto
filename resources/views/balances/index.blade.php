@@ -22,7 +22,11 @@
                             <div class="card-body text-center">
                                 <p class="card-title">
                                 <h3>{{ $balance->current_price }}</h3></p>
-                                <p class="card-text">{{ $balance->gain_usd }}</p>
+                                <p class="card-text">
+                                    {{ $balance->gain_usd }}
+                                    <br>
+                                    {{ $balance->gain_percent }}%
+                                </p>
                             </div>
                         </div>
                     @empty
@@ -30,5 +34,12 @@
                 </div>
             </div>
         </div>
+        @isset($last_fetch)
+            <div class="row">
+                <div class="col">
+                    <h6 class="float-right">Last Fetched: {{ $last_fetch->diffForHumans() }}</h6>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
