@@ -22,11 +22,7 @@
                             <div class="card-body text-center">
                                 <p class="card-title">
                                 <h3>{{ $balance->current_price }}</h3></p>
-                                <p class="card-text">
-                                    {{ $balance->gain_usd }}
-                                    <br>
-                                    {{ $balance->gain_percent }}%
-                                </p>
+                                <p class="card-text">{{ $balance->gain_usd }} | {{ $balance->gain_percent }}%</p>
                             </div>
                         </div>
                     @empty

@@ -33,17 +33,20 @@ class PriceHelper
     public static function fetch()
     {
         try {
-            $Guzzle   = new Client();
-            $response = $Guzzle->get('https://api.coinmarketcap.com/v1/ticker/?limit=0');
+            $data = Cache::remember('prices', 60, function() {
+                $Guzzle   = new Client();
+                $response = $Guzzle->get('https://api.coinmarketcap.com/v1/ticker/?limit=0');
 
-            if ($response->getStatusCode() === 200) {
-                $data = collect(json_decode($response->getBody()->getContents()))->keyBy('symbol');
+                if ($response->getStatusCode() === 200) {
+                    Cache::forever('last_fetch', Carbon::now());
 
-                Cache::forever('last_fetch', Carbon::now());
-                Cache::put('prices', $data, 60);
+                    return collect(json_decode($response->getBody()->getContents()))->keyBy('symbol');
+                }
 
-                return $data;
-            }
+                return collect();
+            });
+
+            return $data;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
