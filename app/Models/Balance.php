@@ -24,16 +24,7 @@ class Balance extends Model
 
     public function coin()
     {
-        return $this->belongsTo(Coin::class);
+        return $this->belongsTo(Currency::class);
     }
 
-    public static function latest()
-    {
-        return Balance::where('user_id', Auth::id())->orderBy('updated_at', 'desc')->firstOrNew([]);
-    }
-
-    public function setSymbolAttribute($value)
-    {
-        $this->attributes['symbol'] = strtoupper($value);
-    }
 }

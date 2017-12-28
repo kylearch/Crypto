@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PriceHelper;
-use App\Models\Coin;
+use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
-class BalanceController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class BalanceController extends Controller
      */
     public function index()
     {
-        $balances = Auth::user()->balances()->groupBy('coin_id')->selectRaw('coin_id, SUM(price) as price, SUM(balance) as balance')->get()->keyBy('coin.symbol');
+        $balances = Auth::user()->balances()->get()->keyBy('currency.symbol');
 
         PriceHelper::getPrices($balances);
 
@@ -28,7 +28,7 @@ class BalanceController extends Controller
         $value = $balances->sum('value');
         $gain  = $balances->sum('gain');
 
-        return view('balances.index', compact('balances', 'value', 'gain'));
+        return view('transactions.index', compact('balances', 'value', 'gain'));
     }
 
     /**
@@ -38,9 +38,9 @@ class BalanceController extends Controller
      */
     public function create()
     {
-        $coins = Coin::orderBy('name', 'asc')->get();
+        $currencies = Currency::orderBy('name', 'asc')->get();
 
-        return view('balances.create', compact('coins'));
+        return view('transactions.create', compact('coins'));
     }
 
     /**
@@ -54,7 +54,7 @@ class BalanceController extends Controller
     {
         Auth::user()->balances()->create($request->only([ 'coin_id', 'balance', 'price' ]));
 
-        return redirect()->route('balances.index');
+        return redirect()->route('transactions.index');
     }
 
     /**

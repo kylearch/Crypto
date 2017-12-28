@@ -30,8 +30,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function balances()
     {
-        return $this->hasMany(Balance::class);
+        return $this
+            ->transactions()
+            ->groupBy('currency_id')
+            ->selectRaw('*, SUM(CASE WHEN `type` = 0 THEN `amount` ELSE -`amount` END) as `balance`, SUM(CASE WHEN `type` = 0 THEN `price` ELSE 0 END) as `total_price`');
     }
 }

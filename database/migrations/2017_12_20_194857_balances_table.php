@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Coin;
+use App\Models\Currency;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -37,7 +37,7 @@ class BalancesTable extends Migration
         $coins = json_decode(file_get_contents('https://api.coinmarketcap.com/v1/ticker/?limit=0'));
 
         foreach ($coins as $coin) {
-            Coin::create([
+            Currency::create([
                 'symbol' => $coin->symbol,
                 'slug'   => $coin->id,
                 'name'   => $coin->name,

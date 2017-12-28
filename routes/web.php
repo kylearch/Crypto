@@ -13,17 +13,11 @@
 
 use Illuminate\Support\Facades\Auth;
 
-// Route::get('/', [ 'as' => 'index', 'uses' => 'TradeController@index' ]);
-
-Route::get('/', function() {
-    return redirect()->route('login');
-});
+Route::get('/', function() { return redirect()->route('login'); });
 
 Route::group([ 'middleware' => 'auth' ], function() {
-    Route::resource('balances', 'BalanceController');
-    // Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'TradeController@dashboard']);
-    // Route::match(['get', 'post'], 'begin', ['as' => 'begin', 'uses' => 'TradeController@begin']);
+    Route::resource('transactions', 'TransactionController');
 });
+
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
