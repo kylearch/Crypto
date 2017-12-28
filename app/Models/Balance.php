@@ -13,18 +13,18 @@ class Balance extends Model
         'price'   => 'float',
     ];
 
-    protected $with = [ 'coin' ];
+    protected $with = [ 'currency' ];
 
-    protected $fillable = [ 'coin_id', 'balance', 'price' ];
+    protected $fillable = [ 'currency_id', 'balance', 'price' ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function coin()
+    public function currency()
     {
-        return $this->belongsTo(Coin::class);
+        return $this->belongsTo(Currency::class, 'coin_id');
     }
 
     public static function latest()

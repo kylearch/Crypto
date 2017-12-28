@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ShapeShift;
 use App\Models\Balance;
-use App\Models\Coin;
+use App\Models\Currency;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -46,7 +46,7 @@ class TradeController extends Controller
      */
     public function begin(Request $request)
     {
-        $coins = Coin::orderBy('name', 'asc')->get();
+        $coins = Currency::orderBy('name', 'asc')->get();
 
         if ($request->isMethod('post')) {
             Auth::user()->balances()->create($request->only([ 'coin_id', 'balance', 'price' ]));

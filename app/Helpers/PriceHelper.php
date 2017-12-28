@@ -15,7 +15,7 @@ class PriceHelper
         $prices = Cache::has('prices') ? Cache::get('prices') : self::fetch();
 
         foreach ($balances as &$balance) {
-            $price = $prices->pull(strtoupper($balance->coin->symbol));
+            $price = $prices->pull(strtoupper($balance->currency->symbol));
 
             $balance->value         = $price->price_usd * $balance->balance;
             $balance->current_price = money_format('%.2n', $balance->value);
