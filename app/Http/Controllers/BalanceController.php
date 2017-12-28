@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PriceHelper;
-use App\Models\Balance;
 use App\Models\Coin;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class BalanceController extends Controller
 {
