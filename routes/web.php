@@ -11,9 +11,7 @@
 |
 */
 
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 // Route::get('/', [ 'as' => 'index', 'uses' => 'TradeController@index' ]);
 

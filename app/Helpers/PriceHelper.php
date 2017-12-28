@@ -12,7 +12,7 @@ class PriceHelper
 {
     public static function getPrices(Collection $balances)
     {
-        $prices = Cache::get('prices', self::fetch());
+        $prices = Cache::has('prices') ? Cache::get('prices') : self::fetch();
 
         foreach ($balances as &$balance) {
             $price = $prices->pull(strtoupper($balance->coin->symbol));
