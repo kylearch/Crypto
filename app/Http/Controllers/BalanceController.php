@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 class BalanceController extends Controller
 {
@@ -17,10 +16,6 @@ class BalanceController extends Controller
     public function index()
     {
         $balances = Auth::user()->getPositiveBalances(TRUE);
-
-        if (Cache::has('last_fetch')) {
-            view()->share('last_fetch', Cache::get('last_fetch'));
-        }
 
         $value = $balances->sum('value') ?? 0;
         $gain  = $balances->sum('gain') ?? 0;

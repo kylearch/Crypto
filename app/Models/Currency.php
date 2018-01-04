@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Helpers\PriceHelper;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Models\Currency
@@ -17,6 +19,8 @@ class Currency extends Model
 
     protected $fillable = [ 'symbol', 'name', 'slug' ];
 
+    protected $appends = [ 'price' ];
+
     public function isUSD()
     {
         return $this->id === self::USD;
@@ -25,5 +29,12 @@ class Currency extends Model
     public function getIconAttribute()
     {
         return $this->isUSD() ? 'fa fa-dollar-sign' : "cc {$this->symbol}";
+    }
+
+    public function getPriceAttribute()
+    {
+        $key = "price.{$this->symbol}";
+
+        return Cache::has($key) ? Cache::get($key) : PriceHelper::fetch($this->slug);
     }
 }

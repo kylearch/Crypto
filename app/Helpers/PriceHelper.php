@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -12,10 +11,8 @@ class PriceHelper
 {
     public static function getPrices(Collection $balances)
     {
-        $prices = Cache::has('prices') ? Cache::get('prices') : self::fetch();
-
         foreach ($balances as &$balance) {
-            $price = $prices->pull(strtoupper($balance->currency->symbol));
+            $price = self::fetch($balance->currency->slug);
             $value = ($price->price_usd * $balance->amount);
             $paid  = $balance->price_paid;
 
@@ -36,25 +33,36 @@ class PriceHelper
         unset($prices, $balance);
     }
 
-    public static function fetch()
+    public static function fetch($currency = NULL)
     {
         $data = collect();
 
         try {
-            $Guzzle   = new Client();
-            $response = $Guzzle->get('https://api.coinmarketcap.com/v1/ticker/?limit=0');
+            $Guzzle = new Client();
 
-            if ($response->getStatusCode() === 200) {
-                $data = collect(json_decode($response->getBody()->getContents()))->keyBy('symbol');
+            if (NULL === $currency) {
+                $response = $Guzzle->get('https://api.coinmarketcap.com/v1/ticker/?limit=0');
 
-                Cache::put('prices', $data, 1);
-                Cache::put('last_fetch', Carbon::now(), 1);
+                if ($response->getStatusCode() === 200) {
+                    $data = collect(json_decode($response->getBody()->getContents()))->keyBy('symbol');
+
+                    foreach ($data as $symbol => $price) {
+                        Cache::put("price.{$symbol}", $price, 1);
+                    }
+                }
+            } else {
+                $response = $Guzzle->get("https://api.coinmarketcap.com/v1/ticker/{$currency}/");
+
+                if ($response->getStatusCode() === 200) {
+                    $data = json_decode($response->getBody()->getContents());
+                    Cache::put("price.{$price->symbol}", $price, 1);
+                }
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
 
-        return $data;
+        return is_a($data, Collection::class) ? $data : $data[0];
     }
 
 }

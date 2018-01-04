@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * App\Models\Balance
@@ -34,7 +33,7 @@ class Balance extends Model
 
     public function getPricePaidAttribute()
     {
-        return Transaction::where([ 'user_id' => $this->user_id ])
+        $paid = Transaction::where([ 'user_id' => $this->user_id ])
             ->where(function($query) {
                 $query->where([ 'to_id' => $this->currency_id, 'type' => Transaction::TYPE_BUY ]);
                 $query->orWhere(function($query) {
@@ -43,6 +42,24 @@ class Balance extends Model
             })->get()->sum(function($transaction) {
                 return $transaction->type === Transaction::TYPE_BUY ? $transaction->amount_from : -$transaction->amount_to;
             });
+
+        $traded = Transaction::where([ 'user_id' => $this->user_id ])
+            ->where(function($query) {
+                $query->where([ 'to_id' => $this->currency_id, 'type' => Transaction::TYPE_TRADE ]);
+                $query->orWhere(function($query) {
+                    $query->where([ 'from_id' => $this->currency_id, 'type' => Transaction::TYPE_TRADE ]);
+                });
+            })->get()->sum(function($transaction) {
+                if ($this->currency_id === $transaction->to_id) {
+                    $value = $transaction->from->price->price_usd * $transaction->amount_from;
+                } else {
+                    $value = $transaction->to->price->price_usd * $transaction->amount_to;
+                }
+
+                return $transaction->to_id === $this->currency_id ? $value : -$value;
+            });
+
+        return max(0, $paid + $traded);
     }
 
     public function setAmountAttribute($amount)
