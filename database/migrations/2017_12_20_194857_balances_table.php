@@ -61,6 +61,6 @@ class BalancesTable extends Migration
     {
         Schema::drop('transactions');
         Schema::drop('balances');
-        Schema::drop('coins');
+        Schema::drop('currencies');
     }
 }

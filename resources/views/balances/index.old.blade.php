@@ -21,8 +21,7 @@
                                 <span class="float-right">{{ $balance->market_price }}</span>
                             </div>
                             <div class="card-body text-center" data-toggle="collapse" href="#collapse-{{ $balance->currency->symbol }}" role="button" aria-expanded="false" aria-controls="collapse-{{ $balance->currency->symbol }}">
-                                <p class="card-title">
-                                <h3>{{ $balance->current_price }}</h3></p>
+                                <p class="card-title"><h3>{{ $balance->current_price }}</h3></p>
                                 <div class="row collapse" id="collapse-{{ $balance->currency->symbol }}">
                                     <div class="col">
                                         <table class="table table-sm mb-0">
