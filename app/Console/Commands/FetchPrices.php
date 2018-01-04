@@ -39,11 +39,6 @@ class FetchPrices extends Command
      */
     public function handle()
     {
-        $response = PriceHelper::fetch($this->argument('currency'));
-        if (is_a($response, Collection::class)) {
-            $this->info('Cached ' . $response->count() . ' prices');
-        } else {
-            $this->info('Cached ' . $response->symbol);
-        }
+        PriceHelper::fetch($this->argument('currency'));
     }
 }

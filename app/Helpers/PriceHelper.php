@@ -47,7 +47,7 @@ class PriceHelper
                     $data = collect(json_decode($response->getBody()->getContents()))->keyBy('symbol');
 
                     foreach ($data as $symbol => $price) {
-                        Cache::add("price.{$symbol}", $price, 1);
+                        Cache::add("price.{$symbol}", $price, 10);
                     }
                 }
             } else {
@@ -55,7 +55,7 @@ class PriceHelper
 
                 if ($response->getStatusCode() === 200) {
                     $data = json_decode($response->getBody()->getContents());
-                    Cache::add("price.{$data->symbol}", $data, 1);
+                    Cache::add("price.{$data->symbol}", $data, 10);
                 }
             }
         } catch (\Exception $e) {
