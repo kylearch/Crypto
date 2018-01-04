@@ -55,7 +55,7 @@ class PriceHelper
 
                 if ($response->getStatusCode() === 200) {
                     $data = json_decode($response->getBody()->getContents());
-                    Cache::put("price.{$price->symbol}", $price, 1);
+                    Cache::put("price.{$data->symbol}", $data, 1);
                 }
             }
         } catch (\Exception $e) {

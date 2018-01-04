@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Helpers\PriceHelper;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 
 class FetchPrices extends Command
 {
@@ -38,6 +39,11 @@ class FetchPrices extends Command
      */
     public function handle()
     {
-        PriceHelper::fetch($this->argument('currency'));
+        $response = PriceHelper::fetch($this->argument('currency'));
+        if (is_a($response, Collection::class)) {
+            $this->info('Cached ' . $response->count() . ' prices');
+        } else {
+            $this->info('Cached ' . $response->symbol);
+        }
     }
 }
