@@ -18,7 +18,7 @@
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
         <a class="navbar-brand" href="{{ route('balances.index') }}">{{ env('APP_NAME') }}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,8 +26,15 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('balances.index') }}">Balances <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('balances.index') }}">Balances</a>
+                </li>
+                <li class="nav-item dropdown dropdown-hover">
+                    <a class="nav-link dropdown-toggle" href="{{ route('transactions.index') }}">Transactions</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ route('transactions.index') }}">View All</a>
+                        <a class="dropdown-item" href="{{ route('transactions.create') }}">Add Transaction</a>
+                    </div>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
@@ -40,7 +47,7 @@
                                 {{ Auth::user()->name }} <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="account-menu">
-                                <a class="dropdown-item" href="{{ route('balances.create') }}">Add New Balance</a>
+                                <a href="{{ route('user.edit') }}" class="dropdown-item">Edit Profile</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>

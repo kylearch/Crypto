@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
-class BalanceController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,16 +15,9 @@ class BalanceController extends Controller
      */
     public function index()
     {
-        $balances = Auth::user()->getPositiveBalances(TRUE);
+        $transactions = Auth::user()->transactions()->orderByDesc('created_at')->with([ 'from', 'to' ])->paginate(50);
 
-        if (Cache::has('last_fetch')) {
-            view()->share('last_fetch', Cache::get('last_fetch'));
-        }
-
-        $value = $balances->sum('value') ?? 0;
-        $gain  = $balances->sum('gain') ?? 0;
-
-        return view('balances.index', compact('balances', 'value', 'gain'));
+        return view('transactions.index', compact('transactions'));
     }
 
     /**
@@ -35,9 +27,9 @@ class BalanceController extends Controller
      */
     public function create()
     {
-        $coins = Currency::orderBy('name', 'asc')->get();
+        $currencies = Currency::where('rank', '>', 0)->orderBy('rank');
 
-        return view('balances.create', compact('coins'));
+        return view('transactions.create', compact('currencies'));
     }
 
     /**
@@ -49,9 +41,10 @@ class BalanceController extends Controller
      */
     public function store(Request $request)
     {
-        Auth::user()->balances()->create($request->only([ 'coin_id', 'balance', 'price' ]));
+        // Request Validator
+        Auth::user()->transactions()->create($request->input());
 
-        return redirect()->route('balances.index');
+        return redirect()->route('transactions.index');
     }
 
     /**

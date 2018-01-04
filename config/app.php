@@ -229,6 +229,11 @@ return [
 
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
+        'NumberHelper' => App\Helpers\NumberHelper::class,
+        'PriceHelper'  => App\Helpers\PriceHelper::class,
+        'Currency'     => App\Models\Currency::class,
+        'Transaction'  => App\Models\Transaction::class,
     ],
 
 ];

@@ -16,26 +16,24 @@ class PriceHelper
 
         foreach ($balances as &$balance) {
             $price = $prices->pull(strtoupper($balance->currency->symbol));
+            $value = ($price->price_usd * $balance->amount);
+            $paid  = $balance->price_paid;
 
-            $zeros  = strspn($price->price_usd, '0', strpos($price->price_usd, '.') + 1);
-            $zeros  += ($zeros >= 2) ? 2 : 0;
-            $zeros  = max(2, $zeros);
-            $format = "%.{$zeros}n";
+            $balance->value   = NumberHelper::format($value, TRUE);
+            $balance->price   = NumberHelper::format($price->price_usd);
+            $balance->gain    = $paid !== 0 ? $value - $paid : 0;
+            $balance->percent = $paid !== 0 ? round(($balance->value - $balance->price_paid) / $balance->price_paid * 100) : 0;
 
-            $balance->value         = $price->price_usd * $balance->balance;
-            $balance->current_price = money_format('%.2n', $balance->value);
-            $balance->market_price  = money_format($format, $price->price_usd);
-            $balance->gain          = $balance->value - $balance->price;
-            $balance->gain_usd      = money_format('%.2n', $balance->gain);
-            $balance->gain_percent  = round(($balance->value - $balance->price) / $balance->price * 100);
-            $balance->change_hour   = $price->percent_change_1h;
-            $balance->change_day    = $price->percent_change_24h;
-            $balance->change_week   = $price->percent_change_7d;
+            $balance->change_hour = $price->percent_change_1h;
+            $balance->change_day  = $price->percent_change_24h;
+            $balance->change_week = $price->percent_change_7d;
 
-            $balance->color = $balance->gain > 0 ? 'success' : 'danger';
+            $balance->color = 'dark';
+            if ($balance->gain !== 0) {
+                $balance->color = $balance->gain > 0 ? 'success' : 'danger';
+            }
         }
-
-        unset($prices);
+        unset($prices, $balance);
     }
 
     public static function fetch()

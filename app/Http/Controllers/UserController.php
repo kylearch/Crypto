@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Currency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
-class BalanceController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,16 +14,7 @@ class BalanceController extends Controller
      */
     public function index()
     {
-        $balances = Auth::user()->getPositiveBalances(TRUE);
-
-        if (Cache::has('last_fetch')) {
-            view()->share('last_fetch', Cache::get('last_fetch'));
-        }
-
-        $value = $balances->sum('value') ?? 0;
-        $gain  = $balances->sum('gain') ?? 0;
-
-        return view('balances.index', compact('balances', 'value', 'gain'));
+        //
     }
 
     /**
@@ -35,9 +24,7 @@ class BalanceController extends Controller
      */
     public function create()
     {
-        $coins = Currency::orderBy('name', 'asc')->get();
-
-        return view('balances.create', compact('coins'));
+        //
     }
 
     /**
@@ -49,9 +36,7 @@ class BalanceController extends Controller
      */
     public function store(Request $request)
     {
-        Auth::user()->balances()->create($request->only([ 'coin_id', 'balance', 'price' ]));
-
-        return redirect()->route('balances.index');
+        //
     }
 
     /**
@@ -73,9 +58,11 @@ class BalanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        $user = Auth::user();
+
+        return view('user.edit', compact('user'));
     }
 
     /**

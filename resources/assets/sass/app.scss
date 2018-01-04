@@ -1,9 +1,16 @@
-
 // Variables
 @import "variables";
-
 // Bootstrap
 @import "~bootstrap/dist/css/bootstrap";
-
 // Crypto Icons
 @import "~cryptocoins-icons/webfont/cryptocoins";
+// Select2
+@import "~select2/dist/css/select2";
+@import "~select2-bootstrap-theme/dist/select2-bootstrap";
+
+.dropdown-hover:hover {
+    .dropdown-menu {
+        top: 97%;
+        display: block;
+    }
+}
