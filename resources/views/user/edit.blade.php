@@ -9,6 +9,13 @@
                     {!! Form::label('name', 'Name:') !!}
                     {!! Form::text('name', $user->name, ['class' => 'form-control']) !!}
                 </div>
+                <div class="form-group">
+                    {!! Form::label('email', 'Email:') !!}
+                    {!! Form::email('email', $user->email, ['class' => 'form-control']) !!}
+                </div>
+                <div class="form-group">
+                    {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                </div>
                 {!! Form::close() !!}
             </div>
         </div>
