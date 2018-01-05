@@ -17,8 +17,8 @@ class BalanceController extends Controller
     {
         $balances = Auth::user()->getPositiveBalances(TRUE);
 
-        $value = $balances->sum('value') ?? 0;
-        $gain  = $balances->sum('gain') ?? 0;
+        $value = $balances->sum(function($balance) { return floatval($balance->value); }) ?? 0;
+        $gain  = $balances->sum(function($balance) { return floatval($balance->gain); }) ?? 0;
 
         return view('balances.index', compact('balances', 'value', 'gain'));
     }
