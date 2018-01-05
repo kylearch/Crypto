@@ -13,13 +13,13 @@ class PriceHelper
     {
         foreach ($balances as &$balance) {
             $price = self::fetch($balance->currency->slug);
-            $value = ($price->price_usd * $balance->amount);
+            $value = (float) ($price->price_usd * $balance->amount);
             $paid  = $balance->price_paid;
 
             $balance->value   = NumberHelper::format($value, TRUE);
             $balance->price   = NumberHelper::format($price->price_usd);
-            $balance->gain    = $paid !== 0 ? $value - $paid : 0;
-            $balance->percent = $paid !== 0 ? round(($balance->value - $balance->price_paid) / $balance->price_paid * 100) : 0;
+            $balance->gain    = $paid !== 0.0 ? $value - $paid : 0;
+            $balance->percent = $paid !== 0.0 ? round(((float) $balance->value - $paid) / $paid * 100) : 0;
 
             $balance->change_hour = $price->percent_change_1h;
             $balance->change_day  = $price->percent_change_24h;

@@ -59,7 +59,7 @@ class Balance extends Model
                 return $transaction->to_id === $this->currency_id ? $value : -$value;
             });
 
-        return max(0, $paid + $traded);
+        return (float) max(0.0, $paid + $traded);
     }
 
     public function setAmountAttribute($amount)
